@@ -111,6 +111,51 @@ abstract class BlocBuilderBase<B, S>
   }
 }`,
   },
+  depend_on_inherited: {
+    file: 'flutter/lib/src/widgets/framework.dart',
+    code: `// Element (simplified)
+T? dependOnInheritedWidgetOfExactType<T>() {
+  final InheritedElement? ancestor = _inheritedElements?[T];
+  if (ancestor != null) {
+    return dependOnInheritedElement(ancestor) as T; // subscribes you
+  }
+  return null;
+}`,
+  },
+  inherited_notify: {
+    file: 'flutter/lib/src/widgets/framework.dart',
+    code: `// InheritedElement (simplified)
+void updated(InheritedWidget oldWidget) {
+  if (widget.updateShouldNotify(oldWidget)) {
+    notifyClients(oldWidget);
+  }
+}
+
+void notifyClients(InheritedWidget oldWidget) {
+  for (final Element dependent in _dependents.keys) {
+    dependent.didChangeDependencies(); // -> markNeedsBuild()
+  }
+}`,
+  },
+  watch_vs_read: {
+    file: 'lib/counter_text.dart',
+    code: `Widget build(BuildContext context) {
+  final count = context.watch<CounterBloc>().state; // rebuilds you
+
+  return TextButton(
+    onPressed: () => context.read<CounterBloc>().add(Increment()), // no rebuild
+    child: Text('$count'),
+  );
+}`,
+  },
+  media_query: {
+    file: 'lib/layout.dart',
+    code: `// rebuilds on ANY change (even keyboard)
+final size = MediaQuery.of(context).size;
+
+// rebuilds only on size change
+final size = MediaQuery.sizeOf(context);`,
+  },
   can_update: {
     file: 'flutter/lib/src/widgets/framework.dart',
     code: `static bool canUpdate(Widget oldWidget, Widget newWidget) {

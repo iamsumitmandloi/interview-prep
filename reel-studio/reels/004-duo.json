@@ -1,0 +1,30 @@
+{
+  "id": "004-duo",
+  "title": "finale: context.watch, InheritedWidget, and the one rule (part 4)",
+  "audio": "voice/004-duo.mp3",
+  "words": "captions/004-duo.words.json",
+  "tailMs": 3200,
+  "events": [
+    {"at": "Part four", "do": "card", "kind": "Q", "text": ["FINALE · PART 4", "`context.watch` in a stateless widget…", "how does it rebuild?"]},
+    {"at": "Because you asked", "do": "clear"},
+    {"at": "built on InheritedWidget", "do": "pop", "text": "InheritedWidget", "style": "stretch", "color": "yellow", "mono": true, "size": 96, "forMs": 1500},
+    {"at": "holds data", "do": "tree", "preset": "inherited_tree", "step": "show", "full": true},
+    {"at": "map of the inherited", "do": "tree", "step": "lookup"},
+    {"at": "registers itself", "do": "tree", "step": "depend", "sfx": "ding"},
+    {"at": "Like subscribing", "do": "code", "snippet": "depend_on_inherited", "highlight": [3, 5], "caption": "find by type + subscribe"},
+    {"at": "updateShouldNotify", "do": "code", "snippet": "inherited_notify", "highlight": [3, 4], "caption": "did anything actually change?"},
+    {"at": "walks through", "do": "code", "highlight": [9, 10], "caption": "every dependent → marked dirty"},
+    {"at": "gets marked dirty", "do": "tree", "preset": "inherited_tree", "step": "notify", "full": true, "new": true, "sfx": "boom"},
+    {"at": "Only the widgets", "do": "pop", "text": "ONLY DEPENDENTS", "style": "slam", "color": "green", "forMs": 1500, "y": 1240},
+    {"at": "context.read do", "do": "code", "snippet": "watch_vs_read", "highlight": [2], "caption": "watch = find + subscribe"},
+    {"at": "doesn't subscribe", "do": "code", "highlight": [5], "caption": "read = find, no subscribe"},
+    {"at": "read inside onPressed", "do": "code", "highlight": [2, 5], "caption": "read in callbacks, watch in build"},
+    {"at": "Wait. So does", "do": "card", "kind": "TWIST", "text": ["`MediaQuery.of(context)`…", "rebuilds on **everything**?"]},
+    {"at": "keyboard opens", "do": "pop", "text": "⌨️ EVEN THE KEYBOARD", "style": "slam", "color": "pink", "forMs": 1400, "y": 1240},
+    {"at": "That's why newer", "do": "code", "snippet": "media_query", "highlight": [5], "caption": "pro tip: depend on less, rebuild less"},
+    {"at": "Four episodes", "do": "clear"},
+    {"at": "Three ways", "do": "card", "kind": "RECALL", "text": ["1 · somebody calls `setState`", "2 · a parent hands it new data", "3 · something it depends on changes", "all three → an element **marked dirty**"]},
+    {"at": "Mystery solved", "do": "pop", "text": "SOLVED. ✅", "style": "slam", "color": "green", "sfx": "ding", "forMs": 1400},
+    {"at": "Mystery solved", "do": "card", "kind": "NEXT", "text": "new series: why `Key`s swap your list items' state 👀", "offset": 1300}
+  ]
+}

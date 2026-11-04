@@ -63,6 +63,25 @@ export const GRAPHS: Record<string, GPreset> = {
       emit: {update: {p: {tag: '_state: count 42'}}, destroy: {c: {sub: 'StatelessWidget #b7e2', tag: 'count: 42'}}, note: 'parent hands it new data'},
     },
   },
+  inherited_tree: {
+    layout: 'columns',
+    columns: [{title: 'YOUR TREE', color: 'blue'}],
+    nodes: [
+      {id: 'n1', label: 'MaterialApp', col: 0, row: 0},
+      {id: 'n2', label: 'BlocProvider<CounterBloc>', sub: 'an InheritedWidget inside', col: 0, row: 1},
+      {id: 'n3', label: 'Scaffold', col: 0, row: 2},
+      {id: 'n4', label: 'Column', col: 0, row: 3},
+      {id: 'n5', label: 'CounterText', sub: 'StatelessWidget', tag: 'context.watch()', col: 0, row: 4},
+    ],
+    links: [['n1', 'n2'], ['n2', 'n3'], ['n3', 'n4'], ['n4', 'n5']],
+    steps: {
+      show: {},
+      lookup: {focus: ['n2', 'n5'], note: 'found by type. instant.'},
+      depend: {focus: ['n2', 'n5'], pin: ['n2'], update: {n5: {tag: 'registered as a dependent ✓'}}, note: 'watch = find + subscribe'},
+      notify: {focus: ['n2', 'n5'], update: {n2: {sub: 'data changed → notify dependents'}, n5: {tag: 'marked dirty → rebuilds'}}, pin: ['n5'],
+        note: 'parents untouched. only dependents rebuild.'},
+    },
+  },
   widget_vs_state: {
     layout: 'cards',
     nodes: [

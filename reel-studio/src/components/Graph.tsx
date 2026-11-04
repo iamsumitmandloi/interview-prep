@@ -41,7 +41,7 @@ export const Graph: React.FC<{seg: any; box: {w: number; h: number}}> = ({seg, b
   });
 
   const colN = preset.columns?.length ?? 1;
-  const nw = cards ? 820 : Math.min(318, (box.w - 40) / colN - 20), nh = cards ? 270 : 150;
+  const nw = cards ? 820 : Math.min(colN === 1 ? 640 : 318, (box.w - 40) / colN - 20), nh = cards ? 270 : 150;
   const colW = (box.w - 40) / colN;
   const rows = Math.max(...preset.nodes.map((n) => n.row)) + 1;
   const gap = cards ? (rows > 2 ? 330 : 380) : Math.min(330, (box.h - 420) / rows);

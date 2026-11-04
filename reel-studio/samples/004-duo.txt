@@ -1,0 +1,20 @@
+# part 4 (finale): context.watch + InheritedWidget, and the one rule behind every rebuild. A = HOST, B = DEV
+A: (dramatic, final episode energy) Part four. The finale. No BlocBuilder. No setState. I just call context.watch inside a stateless widget... and it rebuilds. How?
+B: (calm, leaning back) Because you asked to be notified. context.watch is built on InheritedWidget.
+A: (curious) Which is what, exactly?
+B: (teaching) An InheritedWidget is a widget that holds data, high up in the tree. Like Theme. Or MediaQuery. Or, under the hood, your BlocProvider.
+A: Okay. And how does my widget find it?
+B: Every element keeps a map of the inherited widgets above it, by type. So the lookup is instant. No walking up the tree.
+A: (impressed, but not done) Okay, that's cheap. But finding it isn't the same as rebuilding.
+B: (key point, slower) Right. Here's the important part. When you call watch, or Theme.of, your element doesn't just read the value. It registers itself as a dependent. It basically says, hey, tell me when you change.
+A: (lightbulb) Like subscribing.
+B: Exactly like subscribing. Now, when the data changes, the inherited element asks one question. updateShouldNotify. Did anything actually change? If yes, it walks through its list of dependents, and marks each one dirty.
+A: (it clicks) So my stateless widget gets marked dirty... directly. Its parent never rebuilds.
+B: (nods) Yep. That's the difference from BlocBuilder. Only the widgets that depend on it rebuild. Nothing else.
+A: Then what does context.read do?
+B: (quick, practical) Read finds the value, but doesn't subscribe. So it never rebuilds you. That's why you use read inside onPressed, and watch inside build.
+A: (testing him again) Wait. So does MediaQuery.of rebuild my widget whenever anything changes?
+B: (pro tip energy) Yes. Even when the keyboard opens. That's why newer Flutter has MediaQuery.sizeOf. It only rebuilds you when the size changes.
+A: (sitting back, wrapping up) Okay. Four episodes later. How does a widget actually rebuild?
+B: (slow, this is the final line) Three ways. Somebody calls setState. A parent hands it new data. Or something it depends on changes. And all three end in the same place. An element, marked dirty.
+A: (grinning) Mystery solved.
