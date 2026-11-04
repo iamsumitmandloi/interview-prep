@@ -1,0 +1,15 @@
+# part 3: how BlocBuilder rebuilds a "stateless" widget. A = HOST, B = DEV
+A: (eager, pulling up a chair) Part three. You said BlocBuilder is secretly a StatefulWidget. So walk me through it. I tap a button. What actually happens?
+B: (calm, step by step) You add an event. Your bloc does its thing, and emits a new state.
+A: (curious) Emits it where?
+B: Onto a stream. And inside BlocBuilder, there's a BlocListener that's subscribed to that stream.
+A: (suspicious) And then?
+B: (the reveal, slow) Then it calls setState. With the new state. The same setState you already know.
+A: (laughs) So all that bloc magic just ends in... setState?
+B: Yep. setState marks the element dirty. On the next frame, build runs, and your builder function gets called with the new state.
+A: Okay, but my widget is stateless. How does it get the new value?
+B: (simple) It doesn't fetch anything. The builder creates a brand new widget, with the new value passed in. Same type, so the element is reused, and it just gets new data from its parent.
+A: (it clicks) So my stateless widget never rebuilt itself. Its parent did.
+B: (nods, slower, this is the line) Exactly. Stateless doesn't mean it never changes. It means it doesn't own what changes.
+A: (squinting again) Then what about context.watch? No BlocBuilder at all, and it still rebuilds.
+B: (grins) That one's an InheritedWidget story. Part four.

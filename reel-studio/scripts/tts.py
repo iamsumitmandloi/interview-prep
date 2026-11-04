@@ -30,7 +30,7 @@ PAUSE = {'.': 0.45, '?': 0.6, '!': 0.45}
 # speak code-ish tokens nicely
 def speakable(p):
     p = p.replace('@immutable', 'at immutable')
-    for a, b in [('StatefulWidget', 'stateful widget'), ('StatelessWidget', 'stateless widget'), ('setState', 'set state'), ('UI', 'U.I.')]:
+    for a, b in [('context.watch', 'context dot watch'), ('BlocBuilder', 'bloc builder'), ('BlocListener', 'bloc listener'), ('InheritedWidget', 'inherited widget'), ('StatefulWidget', 'stateful widget'), ('StatelessWidget', 'stateless widget'), ('setState', 'set state'), ('UI', 'U.I.')]:
         p = p.replace(a, b)
     p = re.sub(r'\bui\b', 'U.I.', p)
     return p

@@ -52,6 +52,17 @@ export const GRAPHS: Record<string, GPreset> = {
       compare: {destroy: {w: {label: "Text('43')"}}, reuse: ['e', 'r'], update: {r: {tag: 'repaints only what changed'}}, note: 'widget thrown away. the rest reused.'},
     },
   },
+  bloc_parent: {
+    layout: 'cards',
+    nodes: [
+      {id: 'p', label: 'BlocBuilder', sub: 'parent · has a State', tag: '_state: count 41', col: 0, row: 0},
+      {id: 'c', label: 'CounterText', sub: 'StatelessWidget #a1f3', tag: 'count: 41', col: 0, row: 1},
+    ],
+    steps: {
+      show: {},
+      emit: {update: {p: {tag: '_state: count 42'}}, destroy: {c: {sub: 'StatelessWidget #b7e2', tag: 'count: 42'}}, note: 'parent hands it new data'},
+    },
+  },
   widget_vs_state: {
     layout: 'cards',
     nodes: [
@@ -66,5 +77,6 @@ export const GRAPHS: Record<string, GPreset> = {
 };
 
 export const LIFECYCLES: Record<string, string[]> = {
+  bloc_flow: ['add(event)', 'emit(state)', 'bloc.stream', 'BlocListener', 'setState', 'markNeedsBuild', 'build', 'builder(context, state)'],
   stateful: ['createState', 'initState', 'didChangeDependencies', 'build', 'didUpdateWidget', 'setState', 'deactivate', 'dispose'],
 };

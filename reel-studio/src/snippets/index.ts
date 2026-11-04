@@ -95,6 +95,22 @@ abstract class BlocBuilderBase<B, S>
   ...
 }`,
   },
+  bloc_builder_state: {
+    file: 'flutter_bloc/lib/src/bloc_builder.dart',
+    code: `class _BlocBuilderBaseState<B, S> extends State<BlocBuilderBase<B, S>> {
+  late S _state;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<B, S>(
+      bloc: _bloc,
+      listenWhen: widget.buildWhen,
+      listener: (context, state) => setState(() => _state = state),
+      child: widget.build(context, _state),
+    );
+  }
+}`,
+  },
   can_update: {
     file: 'flutter/lib/src/widgets/framework.dart',
     code: `static bool canUpdate(Widget oldWidget, Widget newWidget) {

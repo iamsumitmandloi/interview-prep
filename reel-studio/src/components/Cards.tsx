@@ -61,7 +61,7 @@ export const Lifecycle: React.FC<{seg: any; box: {w: number; h: number}}> = ({se
         return <div key={n} style={{position: 'absolute', left: 110, top: 60 + i * rowH, height: rowH, display: 'flex', alignItems: 'center', gap: 36, opacity: a}}>
           <div style={{width: 66, height: 66, borderRadius: 33, background: on ? C.blue : done ? C.navy : C.panel, border: `4px solid ${on || done ? C.blue : C.line}`,
             transform: `scale(${on ? 1 + 0.15 * pop(since, fps) : 1})`, boxShadow: on ? `0 0 40px ${C.blue}` : 'none'}} />
-          <div style={{fontFamily: F.mono, fontSize: on ? 50 : 38, fontWeight: on ? 700 : 400, color: on ? C.text : done ? C.dim : C.line}}>{n}()</div>
+          <div style={{fontFamily: F.mono, fontSize: on ? 50 : 38, fontWeight: on ? 700 : 400, color: on ? C.text : done ? C.dim : C.line}}>{n.includes('(') || n.includes('.') || /^[A-Z]/.test(n) ? n : `${n}()`}</div>
         </div>;
       })}
     </div>

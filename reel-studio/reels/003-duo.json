@@ -1,0 +1,26 @@
+{
+  "id": "003-duo",
+  "title": "how BlocBuilder rebuilds a stateless widget (part 3)",
+  "audio": "voice/003-duo.mp3",
+  "words": "captions/003-duo.words.json",
+  "tailMs": 2500,
+  "events": [
+    {"at": "Part three", "do": "card", "kind": "Q", "text": ["PART 3", "how does `BlocBuilder` rebuild", "a stateless widget?"]},
+    {"at": "add an event", "do": "lifecycle", "preset": "bloc_flow", "active": "add(event)"},
+    {"at": "emits a new", "do": "lifecycle", "active": "emit(state)"},
+    {"at": "Onto a stream", "do": "lifecycle", "active": "bloc.stream"},
+    {"at": "BlocListener that's", "do": "lifecycle", "active": "BlocListener"},
+    {"at": "calls setState", "do": "lifecycle", "active": "setState", "sfx": "boom"},
+    {"at": "ends in", "do": "pop", "text": "…setState?! 😂", "style": "stretch", "color": "yellow", "forMs": 1300, "offset": 600},
+    {"at": "Yep.", "do": "code", "snippet": "bloc_builder_state", "highlight": [9], "caption": "the whole trick: one setState"},
+    {"at": "next frame", "do": "lifecycle", "preset": "bloc_flow", "active": "markNeedsBuild", "new": true},
+    {"at": "build runs", "do": "lifecycle", "active": "build"},
+    {"at": "builder function", "do": "lifecycle", "active": "builder(context, state)"},
+    {"at": "my widget is stateless", "do": "objects", "preset": "bloc_parent", "step": "show"},
+    {"at": "brand new widget", "do": "objects", "step": "emit", "sfx": "shatter"},
+    {"at": "Its parent did", "do": "pop", "text": "PARENT DID.", "style": "slam", "color": "cyan", "forMs": 1200},
+    {"at": "Stateless doesn't mean", "do": "card", "kind": "RECALL", "text": ["stateless ≠ never changes", "stateless = doesn't **own** what changes", "`BlocBuilder` → `setState` → new child widget"]},
+    {"at": "Then what about", "do": "card", "kind": "NEXT", "text": "`context.watch()`: no BlocBuilder… still rebuilds?"},
+    {"at": "Part four", "do": "pop", "text": "PART 4 →", "style": "slam", "color": "cyan", "forMs": 1800, "y": 1250}
+  ]
+}
