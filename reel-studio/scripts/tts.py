@@ -8,18 +8,21 @@ from kokoro_onnx import Kokoro
 
 txt, wav_out, words_out = sys.argv[1:4]
 voice = sys.argv[4] if len(sys.argv) > 4 else 'am_michael'
-speed = float(sys.argv[5]) if len(sys.argv) > 5 else 1.08
+speed = float(sys.argv[5]) if len(sys.argv) > 5 else 0.95
 M = os.environ.get('KOKORO_DIR', os.path.expanduser('~/development/kokoro'))
 k = Kokoro(f'{M}/kokoro-v1.0.int8.onnx', f'{M}/voices-v1.0.bin')
 
 text = re.sub(r'\s+', ' ', open(txt).read()).strip()
 # phrases end at . ? ! : , (keep punctuation with the phrase)
-phrases = [p.strip() for p in re.findall(r'[^.?!,:]+(?:\.\.\.|[.?!,:])?', text) if p.strip()]
-PAUSE = {'.': 0.32, '?': 0.38, '!': 0.32, ',': 0.12, ':': 0.18}
+# whole sentences keep natural intonation (splitting at commas made it sound robotic)
+phrases = [p.strip() for p in re.findall(r'.+?(?:\.\.\.(?=\s+[a-z])|[.?!](?=\s|$)|$)', text) if p.strip()]
+PAUSE = {'.': 0.45, '?': 0.6, '!': 0.45}
 
 # speak code-ish tokens nicely
 def speakable(p):
     p = p.replace('@immutable', 'at immutable')
+    for a, b in [('StatefulWidget', 'stateful widget'), ('StatelessWidget', 'stateless widget'), ('setState', 'set state'), ('UI', 'U.I.')]:
+        p = p.replace(a, b)
     p = re.sub(r'\bui\b', 'U.I.', p)
     return p
 
@@ -31,7 +34,8 @@ for p in phrases:
     if len(nz): samples = samples[max(0, nz[0] - 600): nz[-1] + 1200]
     dur = len(samples) / sr
     ws = p.split(' ')
-    weights = [len(w) + 2 for w in ws]
+    # commas inside a sentence = small breath, so give the word before it more time
+    weights = [len(w) + 2 + (6 if w.endswith(',') else 9 if w.endswith('...') else 0) for w in ws]
     total = sum(weights); cur = t
     for w, wt in zip(ws, weights):
         d = dur * wt / total
