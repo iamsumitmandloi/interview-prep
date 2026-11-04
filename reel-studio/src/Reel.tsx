@@ -52,7 +52,7 @@ export const Reel: React.FC<any> = (p) => {
         border: mode === 'pip' || prev === 'pip' ? `${6 * (mode === 'pip' ? t : 1 - t)}px solid ${C.blue}` : 'none', boxShadow: mode === 'pip' ? '0 20px 60px rgba(0,0,0,.5)' : 'none'}}>
         <div style={{width: '100%', height: '100%', transform: `scale(${zoom})`, transformOrigin: '50% 35%'}}>
           {p.video ? <OffthreadVideo src={staticFile(p.video)} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 30%'}} />
-            : <FacePlaceholder />}
+            : p.audio ? <VoiceOrb /> : <FacePlaceholder />}
         </div>
       </div>
       {mode === 'split' && <div style={{position: 'absolute', left: 0, right: 0, top: r.y - 3, height: 6, background: `linear-gradient(90deg, ${C.blue}, ${C.cyan})`, opacity: t}} />}
@@ -81,6 +81,7 @@ export const Reel: React.FC<any> = (p) => {
       {p.credit && frame < fps * 4 && <div style={{position: 'absolute', left: 34, top: 34, fontFamily: F.sans, fontSize: 24, color: C.dim,
         opacity: interpolate(frame, [fps * 3, fps * 4], [1, 0], clamp)}}>{p.credit}</div>}
 
+      {p.audio && <Audio src={staticFile(p.audio)} />}
       {(p.sfx ?? []).map((s: any, i: number) => <Sequence key={`s${i}`} from={msToF(s.ms, fps)} durationInFrames={fps * 2} layout="none">
         <Audio src={staticFile(`sfx/${s.name}.mp3`)} volume={s.volume ?? 0.45} /></Sequence>)}
     </AbsoluteFill>
@@ -99,3 +100,18 @@ const FacePlaceholder = () => (
     <div style={{position: 'absolute', top: 60, fontFamily: F.sans, fontSize: 30, color: C.dim, letterSpacing: 6}}>YOUR FACE HERE</div>
   </AbsoluteFill>
 );
+
+// voice-only reels: brand orb instead of a face
+const VoiceOrb = () => {
+  const f = useCurrentFrame();
+  const pulse = 1 + 0.05 * Math.sin(f / 4) + 0.03 * Math.sin(f / 1.7);
+  return (
+    <AbsoluteFill style={{background: `radial-gradient(circle at 50% 45%, #13224a, ${C.bg} 75%)`, justifyContent: 'center', alignItems: 'center'}}>
+      <div style={{width: 300, height: 300, borderRadius: 150, transform: `scale(${pulse})`, background: `conic-gradient(from ${f * 3}deg, ${C.blue}, ${C.cyan}, ${C.navy}, ${C.blue})`,
+        boxShadow: `0 0 120px ${C.blue}88`, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <div style={{width: 250, height: 250, borderRadius: 125, background: C.bg, display: 'flex', justifyContent: 'center', alignItems: 'center',
+          fontFamily: F.sans, fontWeight: 700, fontSize: 92, color: C.blue, letterSpacing: -4}}>FF</div>
+      </div>
+    </AbsoluteFill>
+  );
+};

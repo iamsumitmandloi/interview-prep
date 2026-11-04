@@ -62,11 +62,12 @@ resolved.sort((a, b) => a.ms - b.ms);
 
 // duration: video length if we have one, else last word + 1.5s
 let durationMs = (words.at(-1)?.endMs || 5000) + 1500;
-if (reel.video) {
+const media = reel.video || reel.audio;
+if (media) {
   try {
     const out = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0',
-      path.resolve(ROOT, 'public', reel.video)]).toString();
-    durationMs = Math.round(parseFloat(out) * 1000);
+      path.resolve(ROOT, 'public', media)]).toString();
+    durationMs = Math.round(parseFloat(out) * 1000) + (reel.video ? 0 : 1200);
   } catch { console.warn('  ! ffprobe failed, using transcript length'); }
 }
 if (reel.durationMs) durationMs = reel.durationMs;
@@ -99,7 +100,7 @@ for (const e of resolved) {
 for (const seg of segments) if (seg.endMs == null) seg.endMs = durationMs;
 for (const seg of segments) if (seg.steps[0].forMs) seg.endMs = Math.min(seg.endMs, seg.startMs + seg.steps[0].forMs);
 
-const props = {id: reel.id, title: reel.title, fps, durationMs, video: reel.video || null,
+const props = {id: reel.id, title: reel.title, fps, durationMs, video: reel.video || null, audio: reel.audio || null,
   credit: reel.credit || null, words, segments, overlays, sfx};
 fs.mkdirSync(path.join(ROOT, 'out/props'), {recursive: true});
 const outPath = path.join(ROOT, 'out/props', `${path.basename(reelPath, '.json')}.json`);
