@@ -17,7 +17,7 @@ remotion kit that turns a talking-head take + word timestamps + a tiny json into
 5. `npm run render -- reels/<id>.json` (`--preview` = half res, fast). output in `out/`
 
 ## reel json
-{ id, title, video: "raw/<id>.mov" | null, audio?: "voice/<id>.mp3" (voice-only reel, shows FF orb), words: "captions/<id>.words.json", credit?, events: [...] }
+{ id, title, video: "raw/<id>.mov" | null, audio?: "voice/<id>.mp3" (faceless reel: no face, big captions + HOST/DEV speaker bar), words: "captions/<id>.words.json", credit?, events: [...] }
 every event has `at` (a word/phrase the speaker says; matched in order) or `atMs`, optional `offset` (ms), `sfx` (name | "none").
 
 stage graphics (one at a time; top 60%, face bottom 40%; `"full": true` = full screen + face bubble):
@@ -46,3 +46,5 @@ macbook air m1 16gb, fanless: render overnight, concurrency 3 (remotion.config.t
 `pip install kokoro-onnx soundfile`; models (kokoro-v1.0.int8.onnx, voices-v1.0.bin) from github.com/thewh1teagle/kokoro-onnx/releases -> ~/development/kokoro
 `python scripts/tts.py samples/001.txt public/voice/001.wav captions/001.words.json am_fenrir` (also writes word timings, no whisper needed)
 use for scratch/test reels and faceless formats. never clone real people's voices without consent.
+two-host podcast scripts: lines `A: (direction) text` / `B: ...` (A=HOST curious, B=DEV explains). directions are acting notes, tts skips them.
+`VOICES="A=af_heart,B=am_michael" python scripts/tts.py samples/001-duo.txt ...` -> words carry `speaker`. example: reels/001-duo.json

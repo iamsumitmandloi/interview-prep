@@ -12,10 +12,19 @@ speed = float(sys.argv[5]) if len(sys.argv) > 5 else 0.95
 M = os.environ.get('KOKORO_DIR', os.path.expanduser('~/development/kokoro'))
 k = Kokoro(f'{M}/kokoro-v1.0.int8.onnx', f'{M}/voices-v1.0.bin')
 
-text = re.sub(r'\s+', ' ', open(txt).read()).strip()
+# dialogue mode: lines "A: (direction) text". voices via env VOICES="A=af_heart,B=am_michael"
+raw = [l.strip() for l in open(txt) if l.strip() and not l.startswith('#')]
+dialogue = all(re.match(r'^[A-Z]:', l) for l in raw)
+VOICES = dict(v.split('=') for v in os.environ.get('VOICES', 'A=af_heart,B=am_michael').split(','))
+SPEED = {'A': 1.0, 'B': 0.94}
+if dialogue:
+    lines = [(l[0], re.sub(r'\([^)]*\)', '', l[2:]).strip()) for l in raw]
+else:
+    lines = [(None, re.sub(r'\s+', ' ', ' '.join(raw)))]
 # phrases end at . ? ! : , (keep punctuation with the phrase)
 # whole sentences keep natural intonation (splitting at commas made it sound robotic)
-phrases = [p.strip() for p in re.findall(r'.+?(?:\.\.\.(?=\s+[a-z])|[.?!](?=\s|$)|$)', text) if p.strip()]
+def split(text): return [p.strip() for p in re.findall(r'.+?(?:\.\.\.(?=\s+[a-z])|[.?!](?=\s|$)|$)', text) if p.strip()]
+phrases = [(spk, p, i == len(split(t)) - 1) for spk, t in lines for i, p in enumerate(split(t))]
 PAUSE = {'.': 0.45, '?': 0.6, '!': 0.45}
 
 # speak code-ish tokens nicely
@@ -27,8 +36,10 @@ def speakable(p):
     return p
 
 audio, words, t, sr = [], [], 0.0, 24000
-for p in phrases:
-    samples, sr = k.create(speakable(p), voice=voice, speed=speed, lang='en-us')
+for spk, p, last in phrases:
+    vc = VOICES.get(spk, voice) if spk else voice
+    sp = SPEED.get(spk, speed) if spk else speed
+    samples, sr = k.create(speakable(p), voice=vc, speed=sp, lang='en-us')
     # trim leading/trailing silence so timings are tight
     nz = np.where(np.abs(samples) > 0.01)[0]
     if len(nz): samples = samples[max(0, nz[0] - 600): nz[-1] + 1200]
@@ -39,9 +50,9 @@ for p in phrases:
     total = sum(weights); cur = t
     for w, wt in zip(ws, weights):
         d = dur * wt / total
-        words.append({'text': w, 'startMs': round(cur * 1000), 'endMs': round((cur + d) * 1000)})
+        words.append({'text': w, 'startMs': round(cur * 1000), 'endMs': round((cur + d) * 1000), **({'speaker': spk} if spk else {})})
         cur += d
-    gap = PAUSE.get(p[-1], 0.06)
+    gap = 0.3 if (spk and last) else PAUSE.get(p[-1], 0.06)
     audio += [samples, np.zeros(int(gap * sr), dtype=samples.dtype)]
     t += dur + gap
 

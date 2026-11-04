@@ -7,7 +7,7 @@ import {Graph} from './components/Graph';
 import {Card, Lifecycle, ImageCard} from './components/Cards';
 import {Pop} from './components/Overlays';
 import {Captions} from './components/Captions';
-import {Panda} from './components/Panda';
+import {Speakers} from './components/Speakers';
 
 // face rect per layout mode
 type Rect = {x: number; y: number; w: number; h: number; r: number};
@@ -41,28 +41,29 @@ export const Reel: React.FC<any> = (p) => {
     zoom *= interpolate(frame, [zf, zf + 4, zf + len - 6, zf + len], [1, z.scale ?? 1.22, z.scale ?? 1.22, 1], clamp);
   }
 
-  const capY = mode === 'face' ? (p.audio ? 1660 : 1330) : mode === 'split' ? H - 330 : H - 260;
-  const popY = mode === 'face' ? 560 : STAGE_H - 170;
+  const faceless = !p.video && !!p.audio;
+  const capY = faceless ? (mode === 'face' ? 640 : mode === 'split' ? STAGE_H + 170 : H - 400) : mode === 'face' ? 1330 : mode === 'split' ? H - 330 : H - 260;
+  const popY = faceless && mode === 'face' ? 300 : mode === 'face' ? 560 : STAGE_H - 170;
 
   return (
     <AbsoluteFill style={{background: `radial-gradient(circle at 50% 25%, ${C.bg2}, ${C.bg} 70%)`}}>
       <AbsoluteFill style={{backgroundImage: `radial-gradient(${C.line} 2px, transparent 2px)`, backgroundSize: '44px 44px', opacity: 0.35}} />
 
       {/* face */}
-      <div style={{position: 'absolute', left: r.x, top: r.y, width: r.w, height: r.h, borderRadius: r.r, overflow: 'hidden',
+      {!faceless && <div style={{position: 'absolute', left: r.x, top: r.y, width: r.w, height: r.h, borderRadius: r.r, overflow: 'hidden',
         border: mode === 'pip' || prev === 'pip' ? `${6 * (mode === 'pip' ? t : 1 - t)}px solid ${C.blue}` : 'none', boxShadow: mode === 'pip' ? '0 20px 60px rgba(0,0,0,.5)' : 'none'}}>
         <div style={{width: '100%', height: '100%', transform: `scale(${zoom})`, transformOrigin: '50% 35%'}}>
           {p.video ? <OffthreadVideo src={staticFile(p.video)} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 30%'}} />
-            : p.audio ? <Panda words={p.words ?? []} /> : <FacePlaceholder />}
+            : <FacePlaceholder />}
         </div>
-      </div>
-      {mode === 'split' && <div style={{position: 'absolute', left: 0, right: 0, top: r.y - 3, height: 6, background: `linear-gradient(90deg, ${C.blue}, ${C.cyan})`, opacity: t}} />}
+      </div>}
+      {mode === 'split' && !faceless && <div style={{position: 'absolute', left: 0, right: 0, top: r.y - 3, height: 6, background: `linear-gradient(90deg, ${C.blue}, ${C.cyan})`, opacity: t}} />}
 
       {/* stage */}
       {segs.map((s: any, i: number) => {
         const Comp = STAGE[s.do];
         if (!Comp) return null;
-        const box = s.full ? {w: W, h: H - 420} : {w: W, h: STAGE_H};
+        const box = s.full ? {w: W, h: H - (faceless ? 520 : 420)} : {w: W, h: STAGE_H};
         return <Sequence key={i} from={s.from} durationInFrames={Math.max(1, s.to - s.from)} layout="none">
           <StageFade len={s.to - s.from}><div style={{position: 'absolute', left: 0, top: s.full ? 120 : 40, width: box.w, height: box.h - 40}}>
             <Comp seg={s} box={{w: box.w, h: box.h - 40}} />
@@ -74,7 +75,8 @@ export const Reel: React.FC<any> = (p) => {
       {(p.overlays ?? []).filter((o: any) => o.do === 'pop').map((o: any, i: number) =>
         <Sequence key={i} from={msToF(o.ms, fps)} durationInFrames={msToF(o.forMs ?? 1100, fps)} layout="none"><Pop e={o} y={popY} /></Sequence>)}
 
-      <Captions words={p.words ?? []} y={capY} />
+      <Captions words={p.words ?? []} y={capY} big={faceless && mode === 'face'} />
+      {faceless && <Speakers words={p.words ?? []} y={H - 230} />}
 
       {/* chrome: progress + handle */}
       <div style={{position: 'absolute', left: 0, top: 0, height: 8, width: `${(frame / durationInFrames) * 100}%`, background: `linear-gradient(90deg, ${C.blue}, ${C.cyan})`}} />

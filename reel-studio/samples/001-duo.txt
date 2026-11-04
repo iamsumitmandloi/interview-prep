@@ -1,0 +1,14 @@
+# two-host script. "A:" = host (curious, pokes holes), "B:" = dev (calm, sure of it).
+# (directions) are for whoever performs it: a human reads them, the tts skips them.
+A: (casual, podcast opener) Okay, classic interview question. What's the difference between a stateless and a stateful widget?
+B: (relaxed, easy one) Easy. A stateless widget has no state of its own. It just draws whatever you give it. A stateful widget keeps state that can change. Like a counter. You tap, and the number goes up.
+A: (squinting, suspicious) Hmm. Then explain this. If a stateful widget changes... why is it marked immutable?
+B: (small smile, this is the good part) Because it doesn't change. Neither of them does. Both widgets are immutable.
+A: (genuinely thrown) Wait, what?
+B: (slow down, teaching) A widget is just a blueprint. Behind every widget, Flutter creates an element. That's the long-lived thing in the tree. For a stateful widget, the element calls createState, once, and holds on to that State object.
+A: (curious) So where does my counter value actually live?
+B: (pointing at it) In the State. Not in the widget. When you call setState, build runs again, and Flutter throws the old widgets away. New blueprints come in. But the element stays, and the State stays with it. So your count survives.
+A: (thinking out loud) Okay... so for a stateless widget, the element gets destroyed?
+B: (shakes head) Nope. Same element, reused too. There's just no State inside, so there's nothing to remember.
+A: (excited, caught you) Hold on. If Flutter throws away widgets on every single rebuild... isn't that super slow?
+B: (grins) That's a whole other reel.

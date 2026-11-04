@@ -1,0 +1,28 @@
+{
+  "id": "001-duo",
+  "title": "stateful vs stateless: two-host podcast (faceless)",
+  "audio": "voice/001-duo.mp3",
+  "words": "captions/001-duo.words.json",
+  "credit": "Q inspired by debasmitasarkar/flutter_interview_guide_2026",
+  "events": [
+    {"at": "classic interview question", "do": "card", "kind": "Q", "text": "`StatelessWidget` vs `StatefulWidget`?"},
+    {"at": "Easy.", "do": "clear"},
+    {"at": "no state", "do": "pop", "text": "NO STATE", "style": "slam", "color": "pink"},
+    {"at": "keeps state", "do": "pop", "text": "KEEPS STATE", "style": "stretch", "color": "cyan"},
+    {"at": "Then explain", "do": "card", "kind": "TWIST", "text": ["if it changes…", "why is it marked `@immutable`?"]},
+    {"at": "Because it", "do": "clear"},
+    {"at": "Both widgets", "do": "pop", "text": "BOTH. 🤯", "style": "slam", "color": "yellow", "sfx": "boom", "forMs": 1400},
+    {"at": "Wait, what", "do": "pop", "text": "WAIT WHAT", "style": "stretch", "color": "cyan", "forMs": 900, "sfx": "pop"},
+    {"at": "just a blueprint", "do": "code", "snippet": "stateful_immutable", "highlight": [1], "caption": "a widget = a read-only blueprint"},
+    {"at": "calls createState", "do": "code", "snippet": "stateful_element_ctor", "highlight": [2, 3], "caption": "the element calls createState()"},
+    {"at": "In the State", "do": "objects", "preset": "widget_vs_state", "step": "show"},
+    {"at": "throws the old", "do": "tree", "preset": "three_trees", "step": "build", "full": true, "offset": -600},
+    {"at": "New blueprints", "do": "tree", "step": "rebuild", "sfx": "shatter"},
+    {"at": "State stays", "do": "tree", "step": "state", "sfx": "ding"},
+    {"at": "so for a stateless", "do": "clear"},
+    {"at": "Nope.", "do": "pop", "text": "NOPE.", "style": "slam", "color": "pink", "forMs": 900},
+    {"at": "Same element", "do": "card", "kind": "RECALL", "text": ["widgets are **replaced**, not changed", "the **element** survives (same type + key)", "stateful: element keeps the `State`", "stateless: nothing to keep"]},
+    {"at": "Hold on.", "do": "card", "kind": "NEXT", "text": "new widgets on every rebuild… isn't that slow?"},
+    {"at": "whole other reel", "do": "pop", "text": "PART 2 →", "style": "slam", "color": "cyan", "forMs": 1600, "y": 1250}
+  ]
+}
