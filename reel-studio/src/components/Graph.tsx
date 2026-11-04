@@ -44,7 +44,7 @@ export const Graph: React.FC<{seg: any; box: {w: number; h: number}}> = ({seg, b
   const nw = cards ? 820 : Math.min(318, (box.w - 40) / colN - 20), nh = cards ? 270 : 150;
   const colW = (box.w - 40) / colN;
   const rows = Math.max(...preset.nodes.map((n) => n.row)) + 1;
-  const gap = cards ? 380 : Math.min(330, (box.h - 420) / rows);
+  const gap = cards ? (rows > 2 ? 330 : 380) : Math.min(330, (box.h - 420) / rows);
   const top = cards ? (box.h - (rows - 1) * gap - nh) / 2 - 40 : 170;
   const pos = (n: GNode) => ({x: cards ? (box.w - nw) / 2 : 20 + n.col * colW + (colW - nw) / 2, y: top + n.row * gap});
   const colColor = (n: GNode) => (C as any)[preset.columns?.[n.col]?.color ?? (n.row === 0 ? 'blue' : 'cyan')];

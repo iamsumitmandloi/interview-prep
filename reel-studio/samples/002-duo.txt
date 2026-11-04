@@ -1,0 +1,15 @@
+# part 2: isn't rebuilding slow? + the bloc twist. A = HOST, B = DEV
+A: (picking up right where we left off) Okay. Last time you said Flutter throws away widgets on every rebuild. That sounds insanely slow.
+B: (calm, has heard this a hundred times) It sounds slow. It isn't. Because widgets are cheap.
+A: (unconvinced) Cheap how?
+B: (simple, matter of fact) A widget is a tiny object. A few fields. No layout, no pixels. And Dart is built for exactly this. Short-lived objects get cleaned up almost for free.
+A: (leaning in) So what's actually expensive?
+B: Layout and painting. That work lives in the render objects. And those are not thrown away.
+A: (curious) Then who decides what gets reused?
+B: (slower, the core idea) The element. On every rebuild, it compares the old widget with the new one. Same type, same key? It keeps itself, and just updates. Only what really changed gets laid out or painted again.
+A: (realization) So a rebuild is mostly just... comparing blueprints.
+B: (nods) Exactly. And if the widget is const, it's the exact same instance, so Flutter skips that whole subtree.
+A: (smug, testing him) Okay, last one. My stateless widget updates with bloc. No setState anywhere. How?
+B: (grins) Your stateless widget doesn't update. BlocBuilder does. Guess what it is under the hood.
+A: (groans) Don't say it.
+B: (deadpan) A StatefulWidget.

@@ -1,0 +1,24 @@
+{
+  "id": "002-duo",
+  "title": "isn't rebuilding slow? + the bloc twist (part 2)",
+  "audio": "voice/002-duo.mp3",
+  "words": "captions/002-duo.words.json",
+  "tailMs": 3200,
+  "events": [
+    {"at": "Okay. Last time", "do": "card", "kind": "Q", "text": ["PART 2", "new widgets on every rebuild…", "isn't that slow?"]},
+    {"at": "It sounds slow", "do": "clear"},
+    {"at": "It isn't", "do": "pop", "text": "IT ISN'T.", "style": "slam", "color": "pink"},
+    {"at": "widgets are cheap", "do": "pop", "text": "CHEAP", "style": "stretch", "color": "green", "forMs": 1000},
+    {"at": "tiny object", "do": "objects", "preset": "rebuild_cost", "step": "widget", "full": true},
+    {"at": "Layout and painting", "do": "objects", "step": "render"},
+    {"at": "On every rebuild", "do": "objects", "step": "compare", "sfx": "shatter"},
+    {"at": "Same type", "do": "code", "snippet": "can_update", "highlight": [2, 3], "caption": "same type + same key = reuse"},
+    {"at": "just... comparing", "do": "code", "snippet": "update_child", "highlight": [7, 8, 9], "caption": "rebuild = compare blueprints"},
+    {"at": "widget is const", "do": "code", "highlight": [4, 5, 6], "caption": "const = same instance = skipped"},
+    {"at": "last one", "do": "card", "kind": "TWIST", "text": ["stateless widget + bloc", "no `setState` anywhere…", "how does it update?"]},
+    {"at": "BlocBuilder does", "do": "code", "snippet": "bloc_builder", "highlight": [6, 7], "caption": "guess what it is under the hood"},
+    {"at": "Don't say", "do": "clear"},
+    {"at": "A StatefulWidget", "do": "pop", "text": "STATEFUL. 😏", "style": "slam", "color": "yellow", "sfx": "boom", "forMs": 1500},
+    {"at": "A StatefulWidget", "do": "card", "kind": "NEXT", "text": "how BlocBuilder rebuilds your \"stateless\" widget", "offset": 1600}
+  ]
+}

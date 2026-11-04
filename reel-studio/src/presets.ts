@@ -39,6 +39,19 @@ export const GRAPHS: Record<string, GPreset> = {
       state: {focus: ['e1'], pin: ['e1'], note: 'State lives here. it survives.'},
     },
   },
+  rebuild_cost: {
+    layout: 'cards',
+    nodes: [
+      {id: 'w', label: "Text('42')", sub: 'Widget', tag: 'a few fields · cheap', col: 0, row: 0},
+      {id: 'e', label: 'StatelessElement', sub: 'Element', tag: 'long-lived · compares', col: 0, row: 1},
+      {id: 'r', label: 'RenderParagraph', sub: 'RenderObject', tag: 'layout + paint · expensive', col: 0, row: 2},
+    ],
+    steps: {
+      widget: {focus: ['w'], pin: ['w']},
+      render: {focus: ['r'], pin: ['r']},
+      compare: {destroy: {w: {label: "Text('43')"}}, reuse: ['e', 'r'], update: {r: {tag: 'repaints only what changed'}}, note: 'widget thrown away. the rest reused.'},
+    },
+  },
   widget_vs_state: {
     layout: 'cards',
     nodes: [

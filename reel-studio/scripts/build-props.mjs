@@ -67,7 +67,7 @@ if (media) {
   try {
     const out = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0',
       path.resolve(ROOT, 'public', media)]).toString();
-    durationMs = Math.round(parseFloat(out) * 1000) + (reel.video ? 0 : 1200);
+    durationMs = Math.round(parseFloat(out) * 1000) + (reel.video ? 0 : reel.tailMs ?? 1200);
   } catch { console.warn('  ! ffprobe failed, using transcript length'); }
 }
 if (reel.durationMs) durationMs = reel.durationMs;
