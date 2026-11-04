@@ -7,6 +7,7 @@ import {Graph} from './components/Graph';
 import {Card, Lifecycle, ImageCard} from './components/Cards';
 import {Pop} from './components/Overlays';
 import {Captions} from './components/Captions';
+import {Panda} from './components/Panda';
 
 // face rect per layout mode
 type Rect = {x: number; y: number; w: number; h: number; r: number};
@@ -40,7 +41,7 @@ export const Reel: React.FC<any> = (p) => {
     zoom *= interpolate(frame, [zf, zf + 4, zf + len - 6, zf + len], [1, z.scale ?? 1.22, z.scale ?? 1.22, 1], clamp);
   }
 
-  const capY = mode === 'face' ? 1330 : mode === 'split' ? H - 330 : H - 260;
+  const capY = mode === 'face' ? (p.audio ? 1660 : 1330) : mode === 'split' ? H - 330 : H - 260;
   const popY = mode === 'face' ? 560 : STAGE_H - 170;
 
   return (
@@ -52,7 +53,7 @@ export const Reel: React.FC<any> = (p) => {
         border: mode === 'pip' || prev === 'pip' ? `${6 * (mode === 'pip' ? t : 1 - t)}px solid ${C.blue}` : 'none', boxShadow: mode === 'pip' ? '0 20px 60px rgba(0,0,0,.5)' : 'none'}}>
         <div style={{width: '100%', height: '100%', transform: `scale(${zoom})`, transformOrigin: '50% 35%'}}>
           {p.video ? <OffthreadVideo src={staticFile(p.video)} style={{width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 30%'}} />
-            : p.audio ? <VoiceOrb /> : <FacePlaceholder />}
+            : p.audio ? <Panda words={p.words ?? []} /> : <FacePlaceholder />}
         </div>
       </div>
       {mode === 'split' && <div style={{position: 'absolute', left: 0, right: 0, top: r.y - 3, height: 6, background: `linear-gradient(90deg, ${C.blue}, ${C.cyan})`, opacity: t}} />}
