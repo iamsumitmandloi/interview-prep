@@ -1,0 +1,9 @@
+stateful vs stateless widget? a stateless widget has no internal state, it just shows what it's given. and what it's given can change.
+a stateful widget holds state that changes over time. like a like button: tap it, count goes up, the ui updates.
+then why is StatefulWidget marked @immutable? because it is immutable. both are.
+a widget is just a blueprint, a cheap read-only config. the state lives in a separate State object,
+and the element, flutter's long-lived node in the tree, holds onto it.
+when you call setState, build runs again and flutter makes brand new widgets. the old blueprints get thrown away,
+but the element keeps the same State, so your count survives. the widget never changed. it got replaced.
+widgets are replaced, not changed. state lives in State, held by the element.
+if widgets get thrown away every frame... isn't that slow?

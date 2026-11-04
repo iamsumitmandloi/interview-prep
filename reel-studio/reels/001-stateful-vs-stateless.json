@@ -1,0 +1,25 @@
+{
+  "id": "001",
+  "title": "stateful vs stateless (the immutable twist)",
+  "video": null,
+  "words": "captions/001.words.json",
+  "credit": "Q inspired by debasmitasarkar/flutter_interview_guide_2026",
+  "events": [
+    {"at": "stateful vs", "do": "card", "kind": "Q", "text": "`StatefulWidget` vs `StatelessWidget`?", "forMs": 2600},
+    {"at": "no internal", "do": "pop", "text": "NO STATE", "style": "slam", "color": "pink"},
+    {"at": "holds state", "do": "pop", "text": "HOLDS STATE", "style": "stretch", "color": "cyan"},
+    {"at": "like a like", "do": "zoom", "scale": 1.25, "forMs": 2200},
+    {"at": "then why", "do": "card", "kind": "TWIST", "text": ["then why is `StatefulWidget`", "marked `@immutable`?"]},
+    {"at": "because it", "do": "clear"},
+    {"at": "both are", "do": "pop", "text": "BOTH. 🤯", "style": "slam", "color": "yellow", "sfx": "boom"},
+    {"at": "blueprint", "do": "code", "snippet": "stateful_immutable", "highlight": [1, 7], "caption": "a widget = a read-only blueprint"},
+    {"at": "separate State", "do": "objects", "preset": "widget_vs_state", "step": "show"},
+    {"at": "the element", "do": "tree", "preset": "three_trees", "step": "build", "full": true},
+    {"at": "brand new", "do": "tree", "step": "rebuild", "sfx": "shatter"},
+    {"at": "keeps the same", "do": "tree", "step": "state", "sfx": "ding"},
+    {"at": "it got replaced", "do": "clear"},
+    {"at": "replaced.", "do": "pop", "text": "REPLACED.", "style": "shatter", "color": "pink", "forMs": 1300, "sfx": "shatter"},
+    {"at": "widgets are replaced", "do": "card", "kind": "RECALL", "text": ["widgets are **replaced**, not changed", "state lives in `State`", "held by the **element**"]},
+    {"at": "if widgets", "do": "card", "kind": "NEXT", "text": "if widgets get thrown away every frame… isn't that slow?"}
+  ]
+}
